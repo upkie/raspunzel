@@ -126,9 +126,13 @@ def main(argv=None):
     print(f"workspace_name = {workspace_name}")
 
     try:
-        target, name = sys.argv[2].split(":")
+        if ":" in args.target:
+            target, name = args.target.split(":")
+        else:  # target name is directory name
+            target = args.target
+            name = args.target.split("/")[-1]
     except ValueError:
-        print(f"{sys.argv[1]} does not appear to be a valid Bazel label")
+        print(f"{args.target} does not appear to be a valid Bazel label")
         sys.exit(-2)
     target = target.lstrip("/")
     if target[0] == "@":
@@ -160,4 +164,4 @@ def main(argv=None):
     elif "unknown" in arch:
         color = Fore.RED
     print(color + arch + Fore.RESET)
-    os.execv(name, [name] + sys.argv[3:])
+    os.execv(name, [name] + args.subargs)

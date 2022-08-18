@@ -19,6 +19,7 @@
 Deploy and run Bazel targets on the Raspberry Pi.
 """
 
+import argparse
 import os
 import sys
 from os import path
@@ -93,14 +94,36 @@ def get_workspace_name():
     )
 
 
+def get_argument_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description=__doc__)
+    subparsers = parser.add_subparsers(title="subcommands", dest="subcmd")
+
+    # raspunzel run --------------------------------------------
+    parser_run = subparsers.add_parser(
+        "run",
+        help="Run a Bazel target",
+    )
+
+    parser_run.add_argument("target", help="Bazel target")
+
+    parser_run.add_argument(
+        "subargs",
+        nargs=argparse.REMAINDER,
+        help="Arguments forwarded to the target.",
+    )
+    return parser
+
+
 def main(argv=None):
+    parser = get_argument_parser()
+    args = parser.parse_args(argv)
+    if args.subcmd is None:
+        parser.print_help()
+        sys.exit(-1)
+    print(args)
+
     workspace_name = get_workspace_name()
     print(f"workspace_name = {workspace_name}")
-
-    if len(sys.argv) < 2 or (len(sys.argv) >= 3 and sys.argv[2] != "--"):
-        this = sys.argv[0]
-        print(f"Usage: {this} //label/for:target [-- [target arguments]]")
-        sys.exit(0)
 
     try:
         target, name = sys.argv[2].split(":")

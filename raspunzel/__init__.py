@@ -23,7 +23,7 @@ import argparse
 import os
 import sys
 from os import path
-from typing import Optional
+from typing import Optional, List
 
 from colorama import Fore
 
@@ -114,6 +114,53 @@ def get_argument_parser() -> argparse.ArgumentParser:
     return parser
 
 
+def run(workspace_name: str, target: str, subargs: List[str]) -> None:
+    try:
+        if ":" in target:
+            target_dir, target_name = target.split(":")
+        else:  # target name is directory name
+            target_dir = target
+            target_name = target.split("/")[-1]
+    except ValueError:
+        print(f"{target} does not appear to be a valid Bazel label")
+        sys.exit(-2)
+    target_dir = target_dir.lstrip("/")
+    if target_dir[0] == "@":
+        external_name, target_dir = target_dir[1:].split("//")
+        target_dir = f"external/{external_name}/{target_dir}"
+    bazel_bin = find_bazel_bin_directory()
+
+    try:
+        arch = read_arch(bazel_bin, target_dir, target_name)
+    except FileNotFoundError:
+        print(Fore.YELLOW + "WARNING: " + Fore.RESET, end="")
+        print(
+            "Couldn't read arch from "
+            f"{bazel_bin}/{target_dir}/{target_name}-2.params"
+        )
+        print("Maybe the target is not a Python script?")
+        arch = "unknown"
+
+    execution_path = (
+        f"{bazel_bin}/{target_dir}/"
+        f"{target_name}.runfiles/{workspace_name}/{target_dir}"
+    )
+
+    os.chdir(execution_path)
+    print(f"{Fore.GREEN}INFO: {Fore.RESET}", end="")
+    print(f"Found target {Fore.YELLOW}{target_name}{Fore.RESET} ", end="")
+    print("for build configuration ", end="")
+    color = Fore.RED
+    if "opt" in arch:
+        color = Fore.GREEN
+    elif "fastbuild" in arch:
+        color = Fore.YELLOW
+    elif "unknown" in arch:
+        color = Fore.RED
+    print(color + arch + Fore.RESET)
+    os.execv(target_name, [target_name] + subargs)
+
+
 def main(argv=None):
     parser = get_argument_parser()
     args = parser.parse_args(argv)
@@ -125,43 +172,5 @@ def main(argv=None):
     workspace_name = get_workspace_name()
     print(f"workspace_name = {workspace_name}")
 
-    try:
-        if ":" in args.target:
-            target, name = args.target.split(":")
-        else:  # target name is directory name
-            target = args.target
-            name = args.target.split("/")[-1]
-    except ValueError:
-        print(f"{args.target} does not appear to be a valid Bazel label")
-        sys.exit(-2)
-    target = target.lstrip("/")
-    if target[0] == "@":
-        external_name, target = target[1:].split("//")
-        target = f"external/{external_name}/{target}"
-    bazel_bin = find_bazel_bin_directory()
-
-    try:
-        arch = read_arch(bazel_bin, target, name)
-    except FileNotFoundError:
-        print(Fore.YELLOW + "WARNING: " + Fore.RESET, end="")
-        print(f"Couldn't read arch from {bazel_bin}/{target}/{name}-2.params")
-        print("Maybe the target is not a Python script?")
-        arch = "unknown"
-
-    execution_path = (
-        f"{bazel_bin}/{target}/{name}.runfiles/{workspace_name}/{target}"
-    )
-
-    os.chdir(execution_path)
-    print(f"{Fore.GREEN}INFO: {Fore.RESET}", end="")
-    print(f"Found target {Fore.YELLOW}{name}{Fore.RESET} ", end="")
-    print("for build configuration ", end="")
-    color = Fore.RED
-    if "opt" in arch:
-        color = Fore.GREEN
-    elif "fastbuild" in arch:
-        color = Fore.YELLOW
-    elif "unknown" in arch:
-        color = Fore.RED
-    print(color + arch + Fore.RESET)
-    os.execv(name, [name] + args.subargs)
+    if args.subcmd == "run":
+        run(workspace_name, args.target, args.subargs)

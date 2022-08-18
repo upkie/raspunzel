@@ -1,6 +1,6 @@
 # raspunzel
 
-Deploy Bazel targets to the Raspberry Pi
+Command-line tool to run Bazel targets on Raspberry Pi.
 
 ## Installation
 

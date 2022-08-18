@@ -25,7 +25,7 @@ import sys
 from .find import find_file
 from .run import run
 
-__version__ = "0.0.1"
+__version__ = "0.1.0"
 
 
 def get_workspace_name():

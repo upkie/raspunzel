@@ -15,11 +15,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Deploy and run Bazel targets on the Raspberry Pi.
+"""
+
 import os
 import sys
 from os import path
 
 from colorama import Fore
+
+__version__ = "0.0.1"
 
 
 def find_bazel_bin_directory():

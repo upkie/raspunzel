@@ -22,27 +22,52 @@ Deploy and run Bazel targets on the Raspberry Pi.
 import os
 import sys
 from os import path
+from typing import Optional
 
 from colorama import Fore
 
 __version__ = "0.0.1"
 
 
-def find_bazel_bin_directory():
+def find_file(name: str, required: bool) -> Optional[str]:
     """
-    Search for a path in the script's parent folders containing a bazel-bin
-    folder.
+    Search for a file or directory in the script's parent folders.
+
+    Args:
+        name: Name of the file or directory to search.
+        required: If True, raise an exception if the file is not found.
+
+    Returns:
+        File path, if found, None otherwise.
+
+    Raises:
+        FileNotFoundError: if the file was not found.
     """
-    cur_path = path.abspath(__file__)
+    cur_path = os.getcwd()
     while path:
-        bin_path = path.join(cur_path, "bazel-bin")
+        bin_path = path.join(cur_path, name)
         if path.exists(bin_path):
             return bin_path
         old_path = cur_path
         cur_path = path.dirname(cur_path)
         if cur_path == old_path:
             break
-    raise FileNotFoundError("Cannot find bazel-bin in parent folders")
+    if required:
+        raise FileNotFoundError(f"Cannot find {name} in parent folders")
+    return None
+
+
+def find_bazel_bin_directory():
+    """
+    Search for a path in parent folders containing a bazel-bin directory.
+
+    Returns:
+        Path to bazel-bin directory.
+
+    Raises:
+        FileNotFoundError: if no bazel-bin directory was found.
+    """
+    return find_file("bazel-bin", required=True)
 
 
 def read_arch(bazel_bin, target, name):
@@ -55,8 +80,22 @@ def read_arch(bazel_bin, target, name):
                 return line.split("/")[1]
 
 
+def get_workspace_name():
+    workspace_file = find_file("WORKSPACE", required=True)
+    print(f"workspace_file = {workspace_file}")
+    for line in open(workspace_file, encoding="utf-8").readlines():
+        if line.startswith('workspace(name = "'):
+            return line.split('"')[1]
+    raise ValueError(
+        "Could not find name in WORKSPACE. "
+        "Note that we don't parse Starlark beyond "
+        '``workspace(name = "something")``.'
+    )
+
+
 def main(argv=None):
-    workspace_name = "gupil"
+    workspace_name = get_workspace_name()
+    print(f"workspace_name = {workspace_name}")
 
     if len(sys.argv) < 2 or (len(sys.argv) >= 3 and sys.argv[2] != "--"):
         this = sys.argv[0]

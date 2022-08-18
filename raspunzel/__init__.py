@@ -86,10 +86,6 @@ def main(argv=None):
         f"{bazel_bin}/{target}/{name}.runfiles/{workspace_name}/{target}"
     )
 
-    if "-cd" in sys.argv:  # our little secret!
-        print(execution_path)  # Usage: cd $(raspunzel //label/for:target)
-        sys.exit(0)
-
     os.chdir(execution_path)
     print(f"{Fore.GREEN}INFO: {Fore.RESET}", end="")
     print(f"Found target {Fore.YELLOW}{name}{Fore.RESET} ", end="")

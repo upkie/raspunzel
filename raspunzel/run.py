@@ -19,6 +19,7 @@
 Deploy and run Bazel targets on the Raspberry Pi.
 """
 
+import logging
 import os
 from os import path
 from typing import List
@@ -65,12 +66,11 @@ def run(workspace: Workspace, target: str, subargs: List[str]) -> None:
     try:
         arch = read_arch(workspace.bazel_bin, target_dir, target_name)
     except FileNotFoundError:
-        print(Fore.YELLOW + "WARNING: " + Fore.RESET, end="")
-        print(
+        logging.warn(
             "Couldn't read arch from "
-            f"{workspace.bazel_bin}/{target_dir}/{target_name}-2.params"
+            f"'{workspace.bazel_bin}/{target_dir}/{target_name}-2.params', "
+            "maybe the target is not a Python script?"
         )
-        print("Maybe the target is not a Python script?")
         arch = "unknown"
 
     execution_path = (
@@ -79,9 +79,8 @@ def run(workspace: Workspace, target: str, subargs: List[str]) -> None:
     )
 
     os.chdir(execution_path)
-    print(f"{Fore.GREEN}INFO: {Fore.RESET}", end="")
-    print(f"Found target {Fore.YELLOW}{target_name}{Fore.RESET} ", end="")
-    print("for build configuration ", end="")
+    target_message = f"Found target {Fore.YELLOW}{target_name}{Fore.RESET}"
+    target_message += "for build configuration "
     color = Fore.RED
     if "opt" in arch:
         color = Fore.GREEN
@@ -89,5 +88,6 @@ def run(workspace: Workspace, target: str, subargs: List[str]) -> None:
         color = Fore.YELLOW
     elif "unknown" in arch:
         color = Fore.RED
-    print(color + arch + Fore.RESET)
+    target_message += color + arch + Fore.RESET
+    logging.info(target_message)
     os.execv(target_name, [target_name] + subargs)

@@ -44,4 +44,4 @@ def sync(workspace: Workspace, destination: str) -> None:
     bazel_bin = workspace.bazel_bin.rstrip("/")
     destination = destination.rstrip("/")
     run(f"rsync -Lrtu --delete {bazel_bin}/ {destination}/")
-    run(f"scp {workspace.workspace_file} {destination}/WORKSPACE")
+    run(f"scp {workspace.root}/WORKSPACE {destination}/WORKSPACE")

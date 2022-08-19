@@ -15,6 +15,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from os import path
+
 from .find import find_file
 
 
@@ -46,10 +48,19 @@ class Workspace:
 
     """
     Bazel workspace information.
+
+    Attributes:
+        bazel_bin: Path to bazel-bin directory.
+        name: Name of the workspace, defined in WORKSPACE file.
+        root: Path to the workspace root directory.
     """
+
+    bazel_bin: str
+    name: str
+    root: str
 
     def __init__(self):
         workspace_file = find_file("WORKSPACE", required=True)
         self.bazel_bin = find_file("bazel-bin", required=True)
         self.name = get_workspace_name(workspace_file)
-        self.workspace_file = workspace_file
+        self.root = path.dirname(workspace_file)

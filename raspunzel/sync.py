@@ -19,13 +19,14 @@
 Sync Bazel workspace to the Raspberry Pi.
 """
 
+import logging
 import subprocess
 
 from .bazel import Workspace
 
 
 def run(*args, **kwargs):
-    print("run: " + args[0])
+    logging.info("run: " + args[0])
     subprocess.check_call(*args, shell=True, **kwargs)
 
 

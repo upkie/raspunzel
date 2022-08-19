@@ -15,6 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import logging
 from os import path
 
 from .find import find_file
@@ -60,7 +61,10 @@ class Workspace:
     root: str
 
     def __init__(self):
+        bazel_bin = find_file("bazel-bin", required=True)
         workspace_file = find_file("WORKSPACE", required=True)
-        self.bazel_bin = find_file("bazel-bin", required=True)
+        logging.info(f"Found workspace file {workspace_file}")
+        logging.info(f"Found bazel-bin at {bazel_bin}")
+        self.bazel_bin = bazel_bin
         self.name = get_workspace_name(workspace_file)
         self.root = path.dirname(workspace_file)

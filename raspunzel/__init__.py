@@ -20,6 +20,7 @@ Deploy and run Bazel targets on the Raspberry Pi.
 """
 
 import argparse
+import logging
 import sys
 
 from .bazel import Workspace
@@ -31,6 +32,16 @@ __version__ = "0.2.0-pre"
 
 def get_argument_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "-v",
+        "--verbose",
+        default=False,
+        action="store_true",
+        help=(
+            "Verbose mode. "
+            "Causes raspunzel to print messages about its progress."
+        ),
+    )
     subparsers = parser.add_subparsers(title="subcommands", dest="subcmd")
 
     # raspunzel run -----------------------------------------------------------
@@ -64,6 +75,9 @@ def main(argv=None):
     if args.subcmd is None:
         parser.print_help()
         sys.exit(-1)
+    if args.verbose:
+        logger = logging.getLogger()
+        logger.setLevel(logging.INFO)
 
     workspace = Workspace()
 

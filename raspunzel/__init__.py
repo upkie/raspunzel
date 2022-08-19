@@ -33,19 +33,28 @@ def get_argument_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     subparsers = parser.add_subparsers(title="subcommands", dest="subcmd")
 
-    # raspunzel run --------------------------------------------
+    # raspunzel run -----------------------------------------------------------
     parser_run = subparsers.add_parser(
         "run",
         help="Run a Bazel target",
     )
-
     parser_run.add_argument("target", help="Bazel target")
-
     parser_run.add_argument(
         "subargs",
         nargs=argparse.REMAINDER,
         help="Arguments forwarded to the target.",
     )
+
+    # raspunzel sync ----------------------------------------------------------
+    parser_sync = subparsers.add_parser(
+        "sync",
+        help="Sync Bazel workspace with the remote host",
+    )
+    parser_sync.add_argument(
+        "destination",
+        help="Destination in rsync+ssh format [user@]host:path",
+    )
+
     return parser
 
 
@@ -61,4 +70,4 @@ def main(argv=None):
     if args.subcmd == "run":
         run(workspace, args.target, args.subargs)
     elif args.subcmd == "sync":
-        sync(workspace)
+        sync(workspace, args.destination)

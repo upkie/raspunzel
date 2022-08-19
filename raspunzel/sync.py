@@ -19,6 +19,31 @@
 Sync Bazel workspace to the Raspberry Pi.
 """
 
+import subprocess
 
-def sync(workspace_name: str) -> None:
-    raise NotImplementedError("sync command not implemented yet")
+from .bazel import Workspace
+
+
+def run(*args, **kwargs):
+    print("run: " + args[0])
+    subprocess.check_call(*args, shell=True, **kwargs)
+
+
+def sync(workspace: Workspace, destination: str) -> None:
+    """
+    Synchronize Bazel workspace with remote host.
+
+    Args:
+        workspace: Bazel workspace information.
+        destination: Destination in rsync+ssh format ``[user@]host:path``.
+    """
+    if ":" not in destination:
+        raise ValueError(
+            f"Destination '{destination}' is not in host:path format"
+        )
+    bazel_bin = workspace.bazel_bin
+    if bazel_bin[-1] != "/":
+        bazel_bin += "/"
+    if destination[-1] != "/":
+        destination += "/"
+    run("rsync -Lrtu --delete {bazel_bin} {destination}")

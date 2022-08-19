@@ -24,6 +24,7 @@ import sys
 
 from .find import find_file
 from .run import run
+from .sync import sync
 
 __version__ = "0.2.0-pre"
 
@@ -75,3 +76,5 @@ def main(argv=None):
 
     if args.subcmd == "run":
         run(workspace_name, args.target, args.subargs)
+    elif args.subcmd == "sync":
+        sync(workspace_name)

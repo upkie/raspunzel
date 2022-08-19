@@ -38,7 +38,15 @@ def read_arch(bazel_bin, target, name):
                 return line.split("/")[1]
 
 
-def run(workspace_name: str, target: str, subargs: List[str]) -> None:
+def run(workspace: Workspace, target: str, subargs: List[str]) -> None:
+    """
+    Run target from a Bazel workspace.
+
+    Args:
+        workspace: Bazel workspace information.
+        target: Label of the Bazel target to run.
+        subargs: Command-line arguments for the target.
+    """
     try:
         if ":" in target:
             target_dir, target_name = target.split(":")

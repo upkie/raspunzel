@@ -37,7 +37,7 @@ def read_arch(bazel_bin, target, name):
                 return line.split("/")[1]
 
 
-def log_target_and_arch(target_name: str, arch: str) -> None:
+def log_run(target_name: str, arch: str) -> None:
     """
     Log target name and build configuration.
 
@@ -97,7 +97,7 @@ def run(workspace: Workspace, target: str, subargs: List[str]) -> None:
         )
         arch = "unknown"
 
-    log_target_and_arch(target_name, arch)
+    log_run(target_name, arch)
 
     execution_path = (
         f"{workspace.bazel_bin}/{target_dir}/"

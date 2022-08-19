@@ -41,9 +41,7 @@ def sync(workspace: Workspace, destination: str) -> None:
         raise ValueError(
             f"Destination '{destination}' is not in host:path format"
         )
-    bazel_bin = workspace.bazel_bin
-    if bazel_bin[-1] != "/":
-        bazel_bin += "/"
-    if destination[-1] != "/":
-        destination += "/"
-    run("rsync -Lrtu --delete {bazel_bin} {destination}")
+    bazel_bin = workspace.bazel_bin.rstrip("/")
+    destination = destination.rstrip("/")
+    run(f"rsync -Lrtu --delete {bazel_bin}/ {destination}/")
+    run(f"scp {workspace.workspace_file} {destination}/WORKSPACE")

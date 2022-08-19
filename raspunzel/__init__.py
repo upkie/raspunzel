@@ -22,25 +22,11 @@ Deploy and run Bazel targets on the Raspberry Pi.
 import argparse
 import sys
 
-from .find import find_file
+from .bazel import Workspace
 from .run import run
 from .sync import sync
 
 __version__ = "0.2.0-pre"
-
-
-def get_workspace_name():
-    workspace_file = find_file("WORKSPACE", required=True)
-
-    for line in open(workspace_file, encoding="utf-8").readlines():
-        if line.startswith('workspace(name = "'):
-            return line.split('"')[1]
-
-    raise ValueError(
-        "Could not find name in WORKSPACE. "
-        "Note that we don't parse Starlark beyond "
-        '``workspace(name = "something")``.'
-    )
 
 
 def get_argument_parser() -> argparse.ArgumentParser:
@@ -69,12 +55,10 @@ def main(argv=None):
     if args.subcmd is None:
         parser.print_help()
         sys.exit(-1)
-    print(args)
 
-    workspace_name = get_workspace_name()
-    print(f"workspace_name = {workspace_name}")
+    workspace = Workspace()
 
     if args.subcmd == "run":
-        run(workspace_name, args.target, args.subargs)
+        run(workspace, args.target, args.subargs)
     elif args.subcmd == "sync":
-        sync(workspace_name)
+        sync(workspace)

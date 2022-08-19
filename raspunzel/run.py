@@ -25,7 +25,7 @@ from typing import List
 
 from colorama import Fore
 
-from .find import find_bazel_bin_directory
+from .bazel import Workspace
 
 
 def read_arch(bazel_bin, target, name):
@@ -53,22 +53,21 @@ def run(workspace_name: str, target: str, subargs: List[str]) -> None:
     if target_dir[0] == "@":
         external_name, target_dir = target_dir[1:].split("//")
         target_dir = f"external/{external_name}/{target_dir}"
-    bazel_bin = find_bazel_bin_directory()
 
     try:
-        arch = read_arch(bazel_bin, target_dir, target_name)
+        arch = read_arch(workspace.bazel_bin, target_dir, target_name)
     except FileNotFoundError:
         print(Fore.YELLOW + "WARNING: " + Fore.RESET, end="")
         print(
             "Couldn't read arch from "
-            f"{bazel_bin}/{target_dir}/{target_name}-2.params"
+            f"{workspace.bazel_bin}/{target_dir}/{target_name}-2.params"
         )
         print("Maybe the target is not a Python script?")
         arch = "unknown"
 
     execution_path = (
-        f"{bazel_bin}/{target_dir}/"
-        f"{target_name}.runfiles/{workspace_name}/{target_dir}"
+        f"{workspace.bazel_bin}/{target_dir}/"
+        f"{target_name}.runfiles/{workspace.name}/{target_dir}"
     )
 
     os.chdir(execution_path)

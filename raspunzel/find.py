@@ -46,16 +46,3 @@ def find_file(name: str, required: bool) -> Optional[str]:
     if required:
         raise FileNotFoundError(f"Cannot find {name} in parent folders")
     return None
-
-
-def find_bazel_bin_directory():
-    """
-    Search for a path in parent folders containing a bazel-bin directory.
-
-    Returns:
-        Path to bazel-bin directory.
-
-    Raises:
-        FileNotFoundError: if no bazel-bin directory was found.
-    """
-    return find_file("bazel-bin", required=True)

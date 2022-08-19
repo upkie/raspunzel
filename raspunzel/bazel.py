@@ -51,5 +51,5 @@ class Workspace:
     def __init__(self):
         workspace_file = find_file("WORKSPACE", required=True)
         self.bazel_bin = find_file("bazel-bin", required=True)
-        self.workspace_name = get_workspace_name(workspace_file)
+        self.name = get_workspace_name(workspace_file)
         self.workspace_file = workspace_file

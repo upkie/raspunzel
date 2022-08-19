@@ -25,15 +25,16 @@ import sys
 from .find import find_file
 from .run import run
 
-__version__ = "0.1.0"
+__version__ = "0.2.0-pre"
 
 
 def get_workspace_name():
     workspace_file = find_file("WORKSPACE", required=True)
-    print(f"workspace_file = {workspace_file}")
+
     for line in open(workspace_file, encoding="utf-8").readlines():
         if line.startswith('workspace(name = "'):
             return line.split('"')[1]
+
     raise ValueError(
         "Could not find name in WORKSPACE. "
         "Note that we don't parse Starlark beyond "

@@ -25,20 +25,7 @@ from typing import List
 
 from colorama import Fore
 
-from .find import find_file
-
-
-def find_bazel_bin_directory():
-    """
-    Search for a path in parent folders containing a bazel-bin directory.
-
-    Returns:
-        Path to bazel-bin directory.
-
-    Raises:
-        FileNotFoundError: if no bazel-bin directory was found.
-    """
-    return find_file("bazel-bin", required=True)
+from .find import find_bazel_bin_directory
 
 
 def read_arch(bazel_bin, target, name):

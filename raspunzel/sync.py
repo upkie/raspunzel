@@ -21,7 +21,6 @@ Sync Bazel workspace to the Raspberry Pi.
 
 import subprocess
 
-
 from .bazel import Workspace
 from .spdlog import logging
 
@@ -39,11 +38,12 @@ def sync(workspace: Workspace, destination: str) -> None:
         workspace: Bazel workspace information.
         destination: Destination in rsync+ssh format ``[user@]host:path``.
     """
-    if ":" not in destination:
+    bazel_bin = workspace.bazel_bin
+    try:
+        host, remote_path = destination.split(":")
+    except ValueError as e:
         raise ValueError(
             f"Destination '{destination}' is not in host:path format"
-        )
-    bazel_bin = workspace.bazel_bin.rstrip("/")
-    destination = destination.rstrip("/")
-    run(f"rsync -Lrtu --delete {bazel_bin}/ {destination}/")
-    run(f"scp {workspace.root}/WORKSPACE {destination}/WORKSPACE")
+        ) from e
+    run(f"rsync -Lrtu --delete {bazel_bin}/ {host}:{remote_path}/")
+    run(f"scp {workspace.root}/WORKSPACE {host}:{remote_path}/WORKSPACE")

@@ -15,10 +15,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import logging
 from os import path
 
 from .find import find_file
+from .spdlog import logging
 
 
 def get_workspace_name(workspace_file: str) -> str:

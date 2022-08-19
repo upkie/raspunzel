@@ -19,12 +19,12 @@
 Deploy and run Bazel targets on the Raspberry Pi.
 """
 
-import logging
 import os
 from os import path
 from typing import List
 
 from .bazel import Workspace
+from .spdlog import logging
 
 
 def read_arch(bazel_bin, target, name):

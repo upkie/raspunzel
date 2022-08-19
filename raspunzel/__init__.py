@@ -20,12 +20,12 @@ Deploy and run Bazel targets on the Raspberry Pi.
 """
 
 import argparse
-import logging
 import sys
 
 from .bazel import Workspace
 from .run import run
 from .sync import sync
+from .spdlog import logging
 
 __version__ = "0.2.0-pre"
 

@@ -24,8 +24,6 @@ import os
 from os import path
 from typing import List
 
-from colorama import Fore
-
 from .bazel import Workspace
 
 
@@ -37,6 +35,32 @@ def read_arch(bazel_bin, target, name):
         for line in params:
             if line.startswith("bazel-out"):
                 return line.split("/")[1]
+
+
+def log_target_and_arch(target_name: str, arch: str) -> None:
+    """
+    Log target name and build configuration.
+
+    Args:
+        target_name: Name of the Bazel target.
+        arch: Build configuration found.
+    """
+    RED: str = "\033[31m"
+    GREEN: str = "\033[32m"
+    YELLOW: str = "\033[33m"
+    RESET: str = "\033[0m"
+
+    target_message = f"Found target {YELLOW}{target_name}{RESET}"
+    target_message += "for build configuration "
+    color = RED
+    if "opt" in arch:
+        color = GREEN
+    elif "fastbuild" in arch:
+        color = YELLOW
+    elif "unknown" in arch:
+        color = RED
+    target_message += color + arch + RESET
+    logging.info(target_message)
 
 
 def run(workspace: Workspace, target: str, subargs: List[str]) -> None:
@@ -73,21 +97,12 @@ def run(workspace: Workspace, target: str, subargs: List[str]) -> None:
         )
         arch = "unknown"
 
+    log_target_and_arch(target_name, arch)
+
     execution_path = (
         f"{workspace.bazel_bin}/{target_dir}/"
         f"{target_name}.runfiles/{workspace.name}/{target_dir}"
     )
 
     os.chdir(execution_path)
-    target_message = f"Found target {Fore.YELLOW}{target_name}{Fore.RESET}"
-    target_message += "for build configuration "
-    color = Fore.RED
-    if "opt" in arch:
-        color = Fore.GREEN
-    elif "fastbuild" in arch:
-        color = Fore.YELLOW
-    elif "unknown" in arch:
-        color = Fore.RED
-    target_message += color + arch + Fore.RESET
-    logging.info(target_message)
     os.execv(target_name, [target_name] + subargs)

@@ -26,7 +26,6 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Mathematics",
 ]
 dependencies = [
-    "colorama",
 ]
 
 [project.optional-dependencies]

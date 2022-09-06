@@ -23,8 +23,8 @@ import os
 from os import path
 from typing import List
 
-from .bazel import Workspace
 from .spdlog import logging
+from .workspace import Workspace
 
 
 def read_arch(bazel_bin, target, name):

@@ -16,16 +16,18 @@
 # limitations under the License.
 
 """
-Deploy and run Bazel targets on the Raspberry Pi.
+Deploy and run Bazel targets on a Raspberry Pi.
 """
 
 import argparse
+import os
 import sys
 
-from .bazel import Workspace
+from .build import build
 from .run import run
-from .sync import sync
 from .spdlog import logging
+from .sync import sync
+from .workspace import Workspace
 
 __version__ = "0.2.0-pre"
 
@@ -37,33 +39,42 @@ def get_argument_parser() -> argparse.ArgumentParser:
         "--verbose",
         default=False,
         action="store_true",
-        help=(
-            "Verbose mode. "
-            "Causes raspunzel to print messages about its progress."
-        ),
+        help="verbose mode",
     )
     subparsers = parser.add_subparsers(title="subcommands", dest="subcmd")
 
-    # raspunzel run -----------------------------------------------------------
+    # build -------------------------------------------------------------------
+    parser_build = subparsers.add_parser(
+        "build",
+        help="build Bazel targets listed in a project file",
+    )
+    parser_build.add_argument("target", help="Bazel target")
+    parser_build.add_argument(
+        "subargs",
+        nargs=argparse.REMAINDER,
+        help="arguments forwarded to the target",
+    )
+
+    # run ---------------------------------------------------------------------
     parser_run = subparsers.add_parser(
         "run",
-        help="Run a Bazel target",
+        help="run a Bazel target",
     )
     parser_run.add_argument("target", help="Bazel target")
     parser_run.add_argument(
         "subargs",
         nargs=argparse.REMAINDER,
-        help="Arguments forwarded to the target.",
+        help="arguments forwarded to the target",
     )
 
-    # raspunzel sync ----------------------------------------------------------
+    # sync --------------------------------------------------------------------
     parser_sync = subparsers.add_parser(
         "sync",
-        help="Sync Bazel workspace with the remote host",
+        help="sync Bazel workspace with the remote host",
     )
     parser_sync.add_argument(
         "destination",
-        help="Destination in rsync+ssh format [user@]host:path",
+        help="destination in rsync+ssh format [user@]host:path",
     )
 
     return parser
@@ -79,9 +90,9 @@ def main(argv=None):
         logger = logging.getLogger()
         logger.setLevel(logging.INFO)
 
-    workspace = Workspace()
-
-    if args.subcmd == "run":
-        run(workspace, args.target, args.subargs)
+    if args.subcmd == "build":
+        build(args.target, args.subargs)
+    elif args.subcmd == "run":
+        run(Workspace(), args.target, args.subargs)
     elif args.subcmd == "sync":
-        sync(workspace, args.destination)
+        sync(Workspace(), args.destination)

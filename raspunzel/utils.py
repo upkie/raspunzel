@@ -15,9 +15,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Utility functions.
+"""
+
 import os
 from os import path
 from typing import Optional
+
+import subprocess
+
+from .spdlog import logging
 
 
 def find_file(name: str, required: bool) -> Optional[str]:
@@ -46,3 +54,11 @@ def find_file(name: str, required: bool) -> Optional[str]:
     if required:
         raise FileNotFoundError(f"Cannot find {name} in parent folders")
     return None
+
+
+def sh(*args, **kwargs):
+    """
+    Run a shell command.
+    """
+    logging.info("run: " + args[0])
+    subprocess.check_call(*args, shell=True, **kwargs)

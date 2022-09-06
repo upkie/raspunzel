@@ -35,6 +35,13 @@ __version__ = "0.2.0-pre"
 def get_argument_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
+        "-s",
+        "--sudo",
+        default=False,
+        action="store_true",
+        help="run as administrator (sudo -E)",
+    )
+    parser.add_argument(
         "-v",
         "--verbose",
         default=False,
@@ -89,6 +96,9 @@ def main(argv=None):
     if args.verbose:
         logger = logging.getLogger()
         logger.setLevel(logging.INFO)
+    if args.sudo and os.geteuid() != 0:
+        args = ["sudo", "-E", sys.executable] + sys.argv + [os.environ]
+        os.execlpe("sudo", *args)
 
     if args.subcmd == "build":
         build(args.target, args.subargs)

@@ -17,8 +17,8 @@
 
 from os import path
 
-from .find import find_file
 from .spdlog import logging
+from .utils import find_file
 
 
 def get_workspace_name(workspace_file: str) -> str:
@@ -63,8 +63,10 @@ class Workspace:
     def __init__(self):
         bazel_bin = find_file("bazel-bin", required=True)
         workspace_file = find_file("WORKSPACE", required=True)
-        logging.info(f"Found workspace file at {workspace_file}")
+        name = get_workspace_name(workspace_file)
         logging.info(f"Found bazel-bin at {bazel_bin}")
+        logging.info(f"Found workspace file at {workspace_file}")
+        logging.info(f"Read workspace name as '{name}'")
         self.bazel_bin = bazel_bin
-        self.name = get_workspace_name(workspace_file)
+        self.name = name
         self.root = path.dirname(workspace_file)

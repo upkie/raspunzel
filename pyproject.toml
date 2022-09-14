@@ -35,7 +35,6 @@ doc = ["sphinx"]
 raspunzel = "raspunzel:main"
 
 [project.urls]
-Documentation = "https://tasts-robots.org/doc/raspunzel/"
 Source = "https://github.com/tasts-robots/raspunzel"
 Tracker = "https://github.com/tasts-robots/raspunzel/issues"
 Changelog = "https://github.com/tasts-robots/raspunzel/blob/master/CHANGELOG.md"

@@ -10,13 +10,19 @@ pip install raspunzel
 
 ## Usage
 
-The basic usage for ``raspunzel`` is to build all cross-compiled targets locally, then sync the repository by:
+The basic usage for ``raspunzel`` goes in three steps. First, build all cross-compiled targets locally:
+
+```console
+bazel build --config=my_cross_compilation_stack //my/target
+```
+
+Then, sync the repository to the robot host:
 
 ```console
 raspunzel sync my_robot_host:some/path
 ```
 
-Go to ``some/path`` on the robot host and run your target with the regular Bazel syntax:
+Finally, go to ``some/path`` on the robot host and run your target using the regular Bazel syntax:
 
 ```console
 raspunzel run //my/target -- --foo --bar

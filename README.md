@@ -16,13 +16,13 @@ The basic usage for ``raspunzel`` goes in three steps. First, build all cross-co
 bazel build --config=my_cross_compilation_stack //my/target
 ```
 
-Then, sync the repository to the robot host:
+Then, sync the repository to the Raspberry Pi host:
 
 ```console
-raspunzel sync my_robot_host:some/path
+raspunzel sync my_raspi:some/path
 ```
 
-Finally, go to ``some/path`` on the robot host and run your target using the regular Bazel syntax:
+Finally, go to ``some/path`` on the Raspberry Pi and run your target using the regular Bazel syntax:
 
 ```console
 raspunzel run //my/target -- --foo --bar

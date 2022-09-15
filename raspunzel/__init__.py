@@ -29,7 +29,7 @@ from .spdlog import logging
 from .sync import sync
 from .workspace import Workspace
 
-__version__ = "0.2.0-pre"
+__version__ = "0.2.0"
 
 
 def get_argument_parser() -> argparse.ArgumentParser:

@@ -30,4 +30,4 @@ raspunzel run //my/target -- --foo --bar
 
 ## Tips
 
-* If you have a Raspberry Pi (64-bit) cross-compilation stack configured in ``.bazelrc``, name it ``"pi64"`` and use ``raspunzel build``, which is shorthand for ``bazel build --config=pi64``.
+* If you have a 64-bit Raspberry Pi cross-compilation stack configured in ``.bazelrc``, name it ``"pi64"`` and use ``raspunzel build``, which is shorthand for ``bazel build --config=pi64``.

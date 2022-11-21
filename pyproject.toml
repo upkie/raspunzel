@@ -27,6 +27,7 @@ classifiers = [
 ]
 dependencies = [
 ]
+keywords = ["raspberry pi", "bazel", "cross-compilation", "deploy"]
 
 [project.optional-dependencies]
 doc = ["sphinx"]

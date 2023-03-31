@@ -10,24 +10,28 @@ pip install raspunzel
 
 ## Usage
 
-The basic usage for ``raspunzel`` goes in three steps. First, build all cross-compiled targets locally:
+Raspunzel's syntax is the same as Bazel. First, build your cross-compiled targets locally by:
 
 ```console
-bazel build --config=my_cross_compilation_stack //my/target
+raspunzel build //my/target
 ```
 
 Then, sync the repository to the Raspberry Pi host:
 
 ```console
-raspunzel sync my_raspi:some/path
+raspunzel sync my_raspi:remote/directory
 ```
 
-Finally, go to ``some/path`` on the Raspberry Pi and run your target using the regular Bazel syntax:
+Finally, go to the remote directory on the Raspberry Pi and run the target by:
 
 ```console
 raspunzel run //my/target -- --foo --bar
 ```
 
-## Tips
+### Advanced
 
-* If you have a 64-bit Raspberry Pi cross-compilation stack configured in ``.bazelrc``, name it ``"pi64"`` and use ``raspunzel build``, which is shorthand for ``bazel build --config=pi64``.
+Raspunzel assumes you have a 64-bit Raspberry Pi cross-compilation stack configured in ``.bazelrc`` and named ``"pi64"`` (this is for instance the case in [``upkie_locomotion``](https://github.com/tasts-robots/upkie_locomotion)); ``raspunzel build`` is then a simple alias for ``bazel build --config=pi64``. If your cross-compilation configuration has a different name, you can use Bazel directly:
+
+```console
+bazel build --config=my_cross_compilation_stack //my/target
+```

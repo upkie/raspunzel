@@ -5,6 +5,7 @@
 ### Changed
 
 - Remove `build` command
+- Remove `sync` command
 
 ## [0.2.0] - 2022/09/15
 

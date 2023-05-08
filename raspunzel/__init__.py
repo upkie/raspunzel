@@ -25,7 +25,6 @@ import sys
 
 from .run import run
 from .spdlog import logging
-from .sync import sync
 from .workspace import Workspace
 
 __version__ = "0.2.0"
@@ -47,35 +46,18 @@ def get_argument_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="verbose mode",
     )
-    subparsers = parser.add_subparsers(title="subcommands", dest="subcmd")
-
-    # run ---------------------------------------------------------------------
-    parser_run = subparsers.add_parser(
-        "run",
-        help="run a Bazel target",
-    )
-    parser_run.add_argument("target", help="Bazel target")
-    parser_run.add_argument(
+    parser.add_argument("target", help="Bazel target")
+    parser.add_argument(
         "subargs",
         nargs=argparse.REMAINDER,
         help="arguments forwarded to the target",
     )
-
-    # sync --------------------------------------------------------------------
-    parser_sync = subparsers.add_parser(
-        "sync",
-        help="sync Bazel workspace with the remote host",
-    )
-    parser_sync.add_argument(
-        "destination",
-        help="destination in rsync+ssh format [user@]host:path",
-    )
-
     return parser
 
 
 def main(argv=None):
     parser = get_argument_parser()
+
     args = parser.parse_args(argv)
     if args.subcmd is None:
         parser.print_help()
@@ -87,7 +69,4 @@ def main(argv=None):
         args = ["sudo", "-E", sys.executable] + sys.argv + [os.environ]
         os.execlpe("sudo", *args)
 
-    if args.subcmd == "run":
-        run(Workspace(), args.target, args.subargs)
-    elif args.subcmd == "sync":
-        sync(Workspace(), args.destination)
+    run(Workspace(), args.target, args.subargs)

@@ -57,16 +57,11 @@ def get_argument_parser() -> argparse.ArgumentParser:
 def main(argv=None):
     """Entry point for the command-line tool."""
     parser = get_argument_parser()
-
     args = parser.parse_args(argv)
-    if args.subcmd is None:
-        parser.print_help()
-        sys.exit(-1)
     if args.verbose:
         logger = logging.getLogger()
         logger.setLevel(logging.INFO)
     if args.sudo and os.geteuid() != 0:
         args = ["sudo", "-E", sys.executable] + sys.argv + [os.environ]
         os.execlpe("sudo", *args)
-
     run(Workspace(), args.target, args.subargs)

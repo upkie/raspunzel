@@ -45,6 +45,7 @@ def get_argument_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="verbose mode",
     )
+    parser.add_argument("command", help="Bazel command")
     parser.add_argument("target", help="Bazel target")
     parser.add_argument(
         "subargs",
@@ -64,4 +65,7 @@ def main(argv=None):
     if args.sudo and os.geteuid() != 0:
         args = ["sudo", "-E", sys.executable] + sys.argv + [os.environ]
         os.execlpe("sudo", *args)
-    run(Workspace(), args.target, args.subargs)
+    if args.command == "run":
+        run(Workspace(), args.target, args.subargs)
+    else:  # unknown command
+        logging.error(f'Command "{args.command}" not available with raspunzel')

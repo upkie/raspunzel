@@ -17,9 +17,7 @@
 
 """Utility functions."""
 
-import logging
 import os
-import subprocess
 from os import path
 from typing import Optional
 
@@ -49,9 +47,3 @@ def find_file(name: str, required: bool) -> Optional[str]:
     if required:
         raise FileNotFoundError(f"Cannot find {name} in parent folders")
     return None
-
-
-def sh(*args, **kwargs):
-    """Run a shell command."""
-    logging.info("run: " + args[0])
-    subprocess.check_call(*args, shell=True, **kwargs)

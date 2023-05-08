@@ -17,7 +17,7 @@
 
 from os import path
 
-from .spdlog import logging
+import logging
 from .utils import find_file
 
 

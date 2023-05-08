@@ -23,7 +23,7 @@ import os
 from os import path
 from typing import List
 
-from .spdlog import logging
+import logging
 from .workspace import Workspace
 
 

@@ -23,8 +23,8 @@ import argparse
 import os
 import sys
 
+import logging
 from .run import run
-from .spdlog import logging
 from .workspace import Workspace
 
 __version__ = "0.2.0"

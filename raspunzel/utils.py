@@ -25,7 +25,7 @@ from typing import Optional
 
 import subprocess
 
-from .spdlog import logging
+import logging
 
 
 def find_file(name: str, required: bool) -> Optional[str]:

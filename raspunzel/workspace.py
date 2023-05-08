@@ -15,15 +15,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from os import path
+"""Bazel workspace information."""
 
 import logging
+from os import path
+
 from .utils import find_file
 
 
 def get_workspace_name(workspace_file: str) -> str:
-    """
-    Read workspace name from WORKSPACE file.
+    """Read workspace name from WORKSPACE file.
 
     Args:
         workspace_file: Path to WORKSPACE file.
@@ -46,9 +47,7 @@ def get_workspace_name(workspace_file: str) -> str:
 
 
 class Workspace:
-
-    """
-    Bazel workspace information.
+    """Bazel workspace information.
 
     Attributes:
         bazel_bin: Path to bazel-bin directory.
@@ -61,6 +60,7 @@ class Workspace:
     root: str
 
     def __init__(self):
+        """Initialize Bazel workspace information."""
         bazel_bin = find_file("bazel-bin", required=True)
         workspace_file = find_file("WORKSPACE", required=True)
         name = get_workspace_name(workspace_file)

@@ -15,19 +15,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Deploy and run Bazel targets on the Raspberry Pi.
-"""
+"""Deploy and run Bazel targets on the Raspberry Pi."""
 
+import logging
 import os
 from os import path
 from typing import List
 
-import logging
 from .workspace import Workspace
 
 
 def read_arch(bazel_bin, target, name):
+    """Read system architecture."""
     suffix = "-2.params"
     if path.exists(f"{bazel_bin}/{target}/{name}_spine-2.params"):
         suffix = "_spine-2.params"  # for C++ agents
@@ -38,8 +37,7 @@ def read_arch(bazel_bin, target, name):
 
 
 def log_run(target_name: str, arch: str) -> None:
-    """
-    Log target name and build configuration.
+    """Log target name and build configuration.
 
     Args:
         target_name: Name of the Bazel target.
@@ -64,8 +62,7 @@ def log_run(target_name: str, arch: str) -> None:
 
 
 def run(workspace: Workspace, target: str, subargs: List[str]) -> None:
-    """
-    Run target from a Bazel workspace.
+    """Run target from a Bazel workspace.
 
     Args:
         workspace: Bazel workspace information.

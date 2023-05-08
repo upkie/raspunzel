@@ -15,22 +15,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Utility functions.
-"""
+"""Utility functions."""
 
+import logging
 import os
+import subprocess
 from os import path
 from typing import Optional
 
-import subprocess
-
-import logging
-
 
 def find_file(name: str, required: bool) -> Optional[str]:
-    """
-    Search for a file or directory in the script's parent folders.
+    """Search for a file or directory in the script's parent folders.
 
     Args:
         name: Name of the file or directory to search.
@@ -57,8 +52,6 @@ def find_file(name: str, required: bool) -> Optional[str]:
 
 
 def sh(*args, **kwargs):
-    """
-    Run a shell command.
-    """
+    """Run a shell command."""
     logging.info("run: " + args[0])
     subprocess.check_call(*args, shell=True, **kwargs)

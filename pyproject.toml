@@ -62,4 +62,4 @@ ignore = [
 ]
 
 [tool.ruff.pydocstyle]
-convention = "numpy"
+convention = "google"

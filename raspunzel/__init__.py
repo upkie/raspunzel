@@ -15,15 +15,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Deploy and run Bazel targets on a Raspberry Pi.
-"""
+"""Deploy and run Bazel targets on a Raspberry Pi."""
 
 import argparse
+import logging
 import os
 import sys
 
-import logging
 from .run import run
 from .workspace import Workspace
 
@@ -31,6 +29,7 @@ __version__ = "0.2.0"
 
 
 def get_argument_parser() -> argparse.ArgumentParser:
+    """Get command-line argument parser."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "-s",
@@ -56,6 +55,7 @@ def get_argument_parser() -> argparse.ArgumentParser:
 
 
 def main(argv=None):
+    """Entry point for the command-line tool."""
     parser = get_argument_parser()
 
     args = parser.parse_args(argv)

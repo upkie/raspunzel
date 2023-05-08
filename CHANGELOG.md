@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Added
+
+- Standalone script for repository distribution
+
 ### Changed
 
 - Remove `build` command

@@ -1,12 +1,18 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- Remove `build` command
+
 ## [0.2.0] - 2022/09/15
 
 ### Added
 
-- `raspunzel build` command
-- `raspunzel sync` command
 - Cosmetic logging submodule
+- New `build` command
+- New `sync` command
 
 ### Changed
 

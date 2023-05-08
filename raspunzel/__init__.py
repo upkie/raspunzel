@@ -23,7 +23,6 @@ import argparse
 import os
 import sys
 
-from .build import build
 from .run import run
 from .spdlog import logging
 from .sync import sync
@@ -49,18 +48,6 @@ def get_argument_parser() -> argparse.ArgumentParser:
         help="verbose mode",
     )
     subparsers = parser.add_subparsers(title="subcommands", dest="subcmd")
-
-    # build -------------------------------------------------------------------
-    parser_build = subparsers.add_parser(
-        "build",
-        help="build Bazel targets listed in a project file",
-    )
-    parser_build.add_argument("target", help="Bazel target")
-    parser_build.add_argument(
-        "subargs",
-        nargs=argparse.REMAINDER,
-        help="arguments forwarded to the target",
-    )
 
     # run ---------------------------------------------------------------------
     parser_run = subparsers.add_parser(
@@ -100,9 +87,7 @@ def main(argv=None):
         args = ["sudo", "-E", sys.executable] + sys.argv + [os.environ]
         os.execlpe("sudo", *args)
 
-    if args.subcmd == "build":
-        build(args.target, args.subargs)
-    elif args.subcmd == "run":
+    if args.subcmd == "run":
         run(Workspace(), args.target, args.subargs)
     elif args.subcmd == "sync":
         sync(Workspace(), args.destination)

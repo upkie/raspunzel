@@ -66,7 +66,7 @@ class Workspace:
         name = get_workspace_name(workspace_file)
         logging.info(f"Found bazel-bin at {bazel_bin}")
         logging.info(f"Found workspace file at {workspace_file}")
-        logging.info(f"Read workspace name as '{name}'")
+        logging.info(f'Read workspace name as "{name}"')
         self.bazel_bin = bazel_bin
         self.name = name
         self.root = path.dirname(workspace_file)

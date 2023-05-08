@@ -15,7 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Run Bazel targets on a Raspberry Pi."""
+"""Run Bazel targets on systems where Bazel is not installed."""
 
 import logging
 from os import path
@@ -216,7 +216,6 @@ def get_argument_parser() -> argparse.ArgumentParser:
 def main():
     """Entry point for the command-line tool."""
     parser = get_argument_parser()
-
     args = parser.parse_args(sys.argv)
     if args.verbose:
         logger = logging.getLogger()
@@ -224,7 +223,6 @@ def main():
     if args.sudo and os.geteuid() != 0:
         args = ["sudo", "-E", sys.executable] + sys.argv + [os.environ]
         os.execlpe("sudo", *args)
-
     run(Workspace(), args.target, args.subargs)
 
 

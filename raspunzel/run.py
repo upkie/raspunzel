@@ -87,7 +87,7 @@ def run(workspace: Workspace, target: str, subargs: List[str]) -> None:
     try:
         arch = read_arch(workspace.bazel_bin, target_dir, target_name)
     except FileNotFoundError:
-        logging.warn(
+        logging.warning(
             "Couldn't read arch from "
             f"'{workspace.bazel_bin}/{target_dir}/{target_name}-2.params', "
             "maybe the target is not a Python script?"

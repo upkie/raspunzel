@@ -17,17 +17,12 @@
 
 """Run Bazel targets on systems where Bazel is not installed."""
 
-import logging
-from os import path
-
-import os
-from typing import Optional
-
 import argparse
+import logging
+import os
 import sys
-
-from typing import List
-
+from os import path
+from typing import List, Optional
 
 __version__ = "0.3.0"
 

@@ -12,6 +12,8 @@ Raspunzel's syntax is the same as Bazel, but it only supports the ``run`` comman
 
 ### PyPI
 
+[![PyPI version](https://img.shields.io/pypi/v/raspunzel)](https://pypi.org/project/raspunzel/)
+
 ```console
 $ pip install raspunzel
 ```

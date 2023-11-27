@@ -20,4 +20,4 @@ $ pip install raspunzel
 
 ### Standalone script
 
-Raspunzel is easy to ship in your own project as a [standalone script](https://github.com/tasts-robots/raspunzel/tree/main/standalone). Check out how it is done for instance in [upkie\_locomotion](https://github.com/tasts-robots/upkie_locomotion).
+Raspunzel is easy to ship in your own project as a [standalone script](https://github.com/tasts-robots/raspunzel/tree/main/standalone). Check out how it is done for instance in the [software of Upkie wheeled-biped robots](https://github.com/upkie/upkie).

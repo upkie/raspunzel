@@ -24,7 +24,7 @@ import sys
 from os import path
 from typing import List, Optional
 
-__version__ = "0.3.0"
+__version__ = "1.0.0"
 
 
 def find_file(name: str, required: bool) -> Optional[str]:

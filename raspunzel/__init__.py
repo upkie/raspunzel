@@ -25,7 +25,7 @@ import sys
 from .run import run
 from .workspace import Workspace
 
-__version__ = "0.3.0"
+__version__ = "1.0.0"
 
 
 def get_argument_parser() -> argparse.ArgumentParser:
